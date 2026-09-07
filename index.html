@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No Limit Games — Independent Tabletop &amp; Video Game Studio</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg: #15141a;
+    --bg-raised: #1c1a22;
+    --line: #2f2b37;
+    --ink: #e9e4da;
+    --ink-dim: #a9a3ae;
+    --muted: #726d7a;
+    --ember: #c1452d;
+    --ember-bright: #e0603f;
+    --brass: #bd9750;
+    --steel: #6c93b0;
+    --max: 74rem;
+    --gutter: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Spectral', Georgia, serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.brand,.status-chip,nav a,.btn{
+    font-family:'Oswald', 'Arial Narrow', sans-serif;
+  }
+
+  p{ max-width:38rem; color:var(--ink-dim); }
+
+  a{ color:inherit; }
+
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width:var(--max);
+    margin:0 auto;
+    padding-left:var(--gutter);
+    padding-right:var(--gutter);
+  }
+
+  /* ---------- motion ---------- */
+  @media (prefers-reduced-motion: no-preference){
+    .hero-reveal{
+      opacity:0;
+      transform:translateY(14px);
+      animation:reveal 0.9s cubic-bezier(.2,.7,.25,1) forwards;
+    }
+    .hero-reveal:nth-child(2){ animation-delay:.12s; }
+    .hero-reveal:nth-child(3){ animation-delay:.24s; }
+    .hero-reveal:nth-child(4){ animation-delay:.36s; }
+  }
+  @keyframes reveal{ to{ opacity:1; transform:none; } }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:rgba(21,20,26,.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-size:1.15rem; font-weight:600; letter-spacing:.02em;
+    text-decoration:none; white-space:nowrap;
+  }
+  .brand span{ color:var(--ember-bright); }
+
+  nav.primary-nav{ display:flex; gap:2rem; }
+  nav.primary-nav a{
+    text-decoration:none; font-size:.95rem; letter-spacing:.03em;
+    color:var(--ink-dim); border-bottom:1px solid transparent;
+    padding-bottom:2px; transition:color .15s, border-color .15s;
+  }
+  nav.primary-nav a:hover{ color:var(--ink); border-color:var(--ember); }
+
+  #nav-toggle{ display:none; }
+  .nav-toggle-btn{
+    display:none; background:none; border:1px solid var(--line);
+    color:var(--ink); width:40px; height:36px; border-radius:2px;
+    cursor:pointer;
+  }
+  .nav-toggle-btn span{
+    display:block; width:18px; height:2px; background:var(--ink);
+    margin:4px auto;
+  }
+
+  @media (max-width: 760px){
+    nav.primary-nav{
+      position:absolute; top:64px; left:0; right:0;
+      flex-direction:column; gap:0;
+      background:var(--bg-raised);
+      border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden;
+      transition:max-height .25s ease;
+    }
+    nav.primary-nav a{
+      padding:1rem var(--gutter); border-bottom:1px solid var(--line);
+    }
+    #nav-toggle:checked ~ .primary-nav{ max-height:260px; }
+    .nav-toggle-btn{ display:block; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:5.5rem 0 6rem;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(60% 50% at 82% 8%, rgba(193,69,45,.16), transparent 60%),
+      radial-gradient(45% 40% at 8% 90%, rgba(108,147,176,.10), transparent 60%);
+    pointer-events:none;
+  }
+  .hero .wrap{ position:relative; }
+  .eyebrow-line{
+    display:flex; align-items:center; gap:.75rem;
+    color:var(--ink-dim); font-size:.85rem; letter-spacing:.08em;
+    margin-bottom:1.75rem;
+  }
+  .eyebrow-line .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--ember-bright);
+    box-shadow:0 0 0 3px rgba(193,69,45,.2);
+  }
+  h1.wordmark{
+    margin:0; font-weight:700; text-transform:uppercase;
+    font-size:clamp(2.6rem, 8vw, 5.4rem);
+    line-height:.94; letter-spacing:.01em;
+  }
+  h1.wordmark .line2{ color:var(--ember-bright); }
+  .hero-sub{
+    max-width:34rem; margin-top:1.75rem;
+    font-size:1.15rem; color:var(--ink-dim);
+  }
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:1rem; margin-top:2.25rem; }
+
+  .btn{
+    display:inline-block; text-decoration:none;
+    padding:.85rem 1.6rem; font-size:.95rem; letter-spacing:.03em;
+    border:1px solid transparent; border-radius:2px;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .btn-primary{ background:var(--ember); color:#fff; }
+  .btn-primary:hover{ background:var(--ember-bright); }
+  .btn-ghost{ border-color:var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--ink-dim); }
+
+  .jagged-divider{
+    display:block; width:100%; height:26px;
+    fill:var(--bg-raised);
+  }
+
+  /* ---------- about ---------- */
+  .about{ background:var(--bg-raised); padding:4.5rem 0; }
+  .about .wrap{
+    display:grid; grid-template-columns:1.4fr 1fr; gap:3rem;
+  }
+  @media (max-width:760px){ .about .wrap{ grid-template-columns:1fr; } }
+  .about h2{ font-size:1.6rem; margin-top:0; }
+  .stat-list{ list-style:none; margin:0; padding:0; }
+  .stat-list li{
+    padding:1rem 0; border-top:1px solid var(--line);
+  }
+  .stat-list li:last-child{ border-bottom:1px solid var(--line); }
+  .stat-num{
+    font-family:'Oswald'; font-size:1.8rem; font-weight:600;
+    color:var(--ember-bright); display:block;
+  }
+  .stat-label{ font-size:.85rem; color:var(--muted); letter-spacing:.02em; }
+
+  /* ---------- featured strip ---------- */
+  .featured{
+    background:linear-gradient(100deg, #241417, #1b1720 55%, #17161d);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:2.75rem 0;
+  }
+  .featured .wrap{
+    display:flex; flex-wrap:wrap; align-items:center;
+    justify-content:space-between; gap:1.5rem;
+  }
+  .featured-text{ max-width:36rem; }
+  .featured-tag{
+    color:var(--ember-bright); font-size:.85rem; letter-spacing:.08em;
+    margin-bottom:.4rem; display:block;
+  }
+  .featured h3{ margin:.2rem 0 .5rem; font-size:1.7rem; }
+  .featured p{ margin:0; color:var(--ink-dim); }
+
+  /* ---------- game sections ---------- */
+  .division{ padding:5rem 0; }
+  .division-head{
+    display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap;
+    border-bottom:1px solid var(--line); padding-bottom:1.25rem;
+    margin-bottom:.5rem;
+  }
+  .division-head h2{ margin:0; font-size:2rem; }
+  .division-head .count{ color:var(--muted); font-size:.95rem; }
+  .division-tabletop .division-head h2{ color:var(--brass); }
+  .division-video .division-head h2{ color:var(--steel); }
+
+  .game-row{
+    display:grid; grid-template-columns:190px 1fr; gap:2rem;
+    padding:2rem 0; border-bottom:1px solid var(--line);
+  }
+  @media (max-width:640px){
+    .game-row{ grid-template-columns:1fr; gap:.6rem; }
+  }
+  .game-row h3{ margin:0 0 .5rem; font-size:1.35rem; font-weight:600; }
+  .game-row p{ margin:0; }
+
+  .status-chip{
+    display:inline-block; font-size:.78rem; letter-spacing:.04em;
+    padding:.3rem .6rem; border:1px solid currentColor;
+    border-radius:2px; line-height:1.3;
+  }
+  .status-date{ display:block; color:var(--ink-dim); margin-top:.35rem; font-size:.82rem; font-family:'Spectral'; }
+
+  .status--feature{ color:var(--ember-bright); }
+  .status--done.tabletop{ color:var(--brass); }
+  .status--dev.tabletop{ color:#8f8460; }
+  .status--early.tabletop{ color:var(--muted); border-style:dashed; }
+
+  .status--beta.video{ color:var(--steel); }
+  .status--hold.video{ color:var(--muted); }
+  .status--early.video{ color:var(--muted); border-style:dashed; }
+  .status--concept.video{ color:var(--muted); border-style:dashed; }
+
+  /* ---------- contact ---------- */
+  .contact{ background:var(--bg-raised); padding:4.5rem 0; }
+  .contact .wrap{
+    display:flex; flex-wrap:wrap; justify-content:space-between;
+    gap:2.5rem;
+  }
+  .contact h2{ font-size:1.7rem; margin-top:0; }
+  .contact-email{
+    font-family:'Oswald'; font-size:1.3rem; color:var(--ember-bright);
+    text-decoration:none;
+  }
+  .social-row{ display:flex; gap:1rem; list-style:none; padding:0; margin:1.25rem 0 0; }
+  .social-row a{
+    display:flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border:1px solid var(--line);
+    border-radius:50%; text-decoration:none; font-size:.85rem;
+    color:var(--ink-dim); transition:border-color .15s, color .15s;
+  }
+  .social-row a:hover{ border-color:var(--ember); color:var(--ink); }
+
+  footer{
+    padding:2rem 0; border-top:1px solid var(--line);
+    color:var(--muted); font-size:.85rem;
+  }
+  footer .wrap{
+    display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between;
+  }
+
+  ::selection{ background:var(--ember); color:#fff; }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--ember-bright); outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="#top" class="brand">NO LIMIT <span>GAMES</span></a>
+    <input type="checkbox" id="nav-toggle">
+    <label class="nav-toggle-btn" for="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <nav class="primary-nav">
+      <a href="#tabletop">Tabletop</a>
+      <a href="#video">Video Games</a>
+      <a href="#about">Studio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow-line hero-reveal">
+        <span class="dot"></span> Independent studio · founded 2010
+      </div>
+      <h1 class="wordmark hero-reveal">
+        NO LIMIT<br><span class="line2">GAMES</span>
+      </h1>
+      <p class="hero-sub hero-reveal">
+        A one-person studio designing tabletop and video games —
+        card duels, souls-for-the-taking board games, and a
+        Risk-style war for the ruins of America. Twelve titles,
+        one desk.
+      </p>
+      <div class="hero-actions hero-reveal">
+        <a href="#tabletop" class="btn btn-primary">See the games</a>
+        <a href="https://gamefound.com/en/projects/no-limits/battle-of-souls" class="btn btn-ghost">Follow on Gamefound</a>
+      </div>
+    </div>
+    <svg class="jagged-divider" viewBox="0 0 1200 26" preserveAspectRatio="none">
+      <polygon points="0,26 0,14 60,20 130,8 210,18 300,6 380,16 470,4 560,14
+        650,2 740,12 830,4 920,14 1010,6 1100,16 1200,8 1200,26"/>
+    </svg>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div>
+        <h2>Started as a class project. Never stopped.</h2>
+        <p>
+          In 2010 a handful of students set out to build their first
+          game, Vengeance. The team scattered years ago; the work
+          didn't. No Limit Games is now run solo by its co-founder,
+          who kept designing — first on the side, then in earnest —
+          until "someday" turned into a slate of a dozen tabletop
+          and video game projects in various stages of finish.
+        </p>
+        <p>
+          The studio's first release, <strong>Battle of Souls</strong>,
+          is headed to Gamefound this month, with a deckbuilder
+          expansion and several finished titles queued up behind it.
+        </p>
+      </div>
+      <ul class="stat-list">
+        <li><span class="stat-num">2010</span><span class="stat-label">Studio founded</span></li>
+        <li><span class="stat-num">12</span><span class="stat-label">Games in the works</span></li>
+        <li><span class="stat-num">1</span><span class="stat-label">Person running it</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="wrap">
+      <div class="featured-text">
+        <span class="featured-tag">LAUNCHING THIS MONTH</span>
+        <h3>Battle of Souls — live on Gamefound, September 2026</h3>
+        <p>
+          Two players fight for ownership of the souls of fallen
+          warriors in a seesaw battle where mercy isn't rewarded.
+          Back it, wishlist it, or just come watch it happen.
+        </p>
+      </div>
+      <a href="https://gamefound.com/en/projects/no-limits/battle-of-souls" class="btn btn-primary">View the campaign</a>
+    </div>
+  </section>
+
+  <section class="division division-tabletop" id="tabletop">
+    <div class="wrap">
+      <div class="division-head">
+        <h2>Tabletop Games</h2>
+        <span class="count">8 titles</span>
+      </div>
+
+      <div class="game-row">
+        <div>
+          <span class="status-chip status--feature">Coming to Gamefound</span>
+          <span class="status-date">September 2026</span>
+        </div>
+        <div>
+          <h3>Battle of Souls</h3>
+          <p>A player-vs-player card and board game fought over
+          the souls of the fallen — strategic, unforgiving, and
+          built for two rivals who don't mind showing no mercy.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--done tabletop">Finished</span></div>
+        <div>
+          <h3>Battle of Souls: Deckbuilder</h3>
+          <p>A standalone deckbuilding take on the Battle of Souls
+          world, ready to go — likely following the core game to
+          crowdfunding once it's found its audience.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--done tabletop">Completed</span></div>
+        <div>
+          <h3>Death of Liberty</h3>
+          <p>America has fallen to a self-declared world ruler.
+          Choose a side and fight to take the country back in this
+          Risk-style war for the continent. Map art may still get
+          a pass.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--done tabletop">Completed</span></div>
+        <div>
+          <h3>Vampire, Humans &amp; Werewolves</h3>
+          <p>A finished hidden-faction game of shifting loyalties
+          between three sides who each want the others gone.
+          Minor visual touch-ups pending.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--done tabletop">Completed</span></div>
+        <div>
+          <h3>Drink Master War!</h3>
+          <p>A war-themed party game built for a table with drinks
+          on it. Rules are locked; final artwork is still coming
+          together.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--dev tabletop">In development</span></div>
+        <div>
+          <h3>Vengeance: The Card Game</h3>
+          <p>A martial-arts fighting game in card form, spun off
+          from the Vengeance universe, built around a roster of six
+          fighters carried over from the original concept art.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--dev tabletop">In development</span></div>
+        <div>
+          <h3>The Mastermind</h3>
+          <p>A social deduction game for 4–8 players, adapted from
+          an original novella. Rulebook and character profiles are
+          done; the remaining art is what's left to finish.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--early tabletop">Early development</span></div>
+        <div>
+          <h3>Untitled Dungeons &amp; Dragons Concept</h3>
+          <p>A homebrew D&amp;D-adjacent project just getting off
+          the ground. Details to come as it takes shape.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="division division-video" id="video">
+    <div class="wrap">
+      <div class="division-head">
+        <h2>Video Games</h2>
+        <span class="count">4 titles</span>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--beta video">Beta testing</span></div>
+        <div>
+          <h3>Battle of Souls</h3>
+          <p>The Unity-built video game companion to the tabletop
+          series, currently in beta with a Mac/Apple port planned
+          down the line.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--hold video">On hold</span></div>
+        <div>
+          <h3>Vengeance</h3>
+          <p>A fighting game aiming for authentic real-world martial
+          arts — 3D fighters moving along a 2D plane, in the
+          tradition of the genre's classics. Paused, not abandoned.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--early video">Early development</span></div>
+        <div>
+          <h3>Death of Liberty</h3>
+          <p>An FPS built from a design document first written in
+          2011, set in the same fallen-America world as its
+          tabletop counterpart. Currently in documentation.</p>
+        </div>
+      </div>
+
+      <div class="game-row">
+        <div><span class="status-chip status--concept video">Concept</span></div>
+        <div>
+          <h3>Untitled Real-Time Strategy Game</h3>
+          <p>An RTS still on the drawing board. No details locked
+          in yet.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div>
+        <h2>Follow the studio</h2>
+        <p>Updates on Battle of Souls and everything behind it,
+        as they happen.</p>
+        <a href="mailto:william@nolimitgamez.com" class="contact-email">william@nolimitgamez.com</a></p>
+          <img src="images/logo.png" alt="No Limit Games Logo">
+        <ul class="social-row">
+          <li><a href="https://www.facebook.com/No-Limit-Games-LLC-157756340910712/" aria-label="Facebook">f</a></li>
+          <li><a href="https://twitter.com/nolimitgames" aria-label="Twitter / X">x</a></li>
+          <li><a href="https://www.youtube.com/channel/UC0pqqjTsiM_0JYojYdBUBnA" aria-label="YouTube">yt</a></li>
+          <li><a href="https://www.instagram.com/nolimits15/" aria-label="Instagram">ig</a></li>
+          <li><a href="https://www.pinterest.com/fingaz1/" aria-label="Pinterest">p</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 No Limit Games. All rights reserved.</span>
+    <span>Designed for nolimitgamez.com</span>
+  </div>
+</footer>
+
+</body>
+</html>
